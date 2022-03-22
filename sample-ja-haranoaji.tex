@@ -1,0 +1,95 @@
+\documentclass[xelatex,a4paper,ja=standard,jafont=haranoaji]{bxjsarticle}
+% \usepackage[haranoaji,threeweight]{zxjafont}
+\usepackage{metalogo}
+\usepackage{amsmath}
+\title{\XeLaTeX による日本語ドキュメント例 (デフォルト)}
+\subtitle{サブタイトル？}
+\author{Shin Saito}
+
+\newcommand{\jasample}{武士道はそのシンボルである桜花と等しく、日本の地に固有の花である。}
+\newcommand{\ensample}{The quick brown fox jumped over the lazy dog.}
+
+\begin{document}
+\maketitle
+
+以下、\texttt{bxjsarticle} クラスに \texttt{jafont=haranoaji} を指定した場合の振る舞いである。
+この場合、和文に原ノ味フォントが使われるうえに、マルチウェイトにも対応しているように見える。
+
+\section{フォントファミリによる違い}
+
+\subsection{セリフ体 (\texttt{\textbackslash rmfamily})}
+
+セリフ体では \texttt{\textbackslash ltseries} でライトウェイトが指定できるようになる。
+ただし、英文フォントに対しては適用されない。
+なお、対応する \texttt{\textbackslash textlt} コマンドはない。
+
+\rmfamily\LARGE
+
+{\ltseries (ライト) 日本語: \jasample
+
+English: the quick brown fox jumped over the lazy dog.}
+
+{\mdseries (標準) 日本語: \jasample
+
+English: the quick brown fox jumped over the lazy dog.}
+
+{\bfseries (太字) 日本語: \jasample
+
+English: the quick brown fox jumped over the lazy dog.}
+
+{\mdseries リガチャのテスト: file, flow, off, difficult, offline, off\/line, off\textcompwordmark line.}
+ 
+\normalsize
+\begin{gather*}
+    S = \sum_{i=1}^n i \\
+    \Gamma \vdash x \colon \tau \quad \Gamma \vdash {\neg(A\land B)} \iff {\neg A} \lor {\neg B}
+\end{gather*}
+
+\subsection{サンセリフ体 (\texttt{\textbackslash sffamily})}
+
+サンセリフ体では \texttt{\textbackslash ebseries} で極太ウェイトが指定できるようになる。
+こちらも英文フォントに対しては適用されない。
+
+\sffamily\LARGE
+
+{\mdseries (標準) 日本語: \jasample
+
+English: the quick brown fox jumped over the lazy dog.}
+
+{\bfseries (太字) 日本語: \jasample
+
+English: the quick brown fox jumped over the lazy dog.}
+
+{\ebseries (極太) 日本語: \jasample
+
+English: the quick brown fox jumped over the lazy dog.}
+
+{\mdseries リガチャのテスト: file, flow, off, difficult, offline, off\/line, off\textcompwordmark line.}
+
+\normalsize
+\begin{gather*}
+    S = \sum_{i=1}^n i \\
+    \Gamma \vdash x \colon \tau \quad \Gamma \vdash {\neg(A\land B)} \iff {\neg A} \lor {\neg B}
+\end{gather*}
+
+\subsection{タイプライタ体 (\texttt{\textbackslash ttfamily})}
+
+\ttfamily\LARGE
+
+{\mdseries (標準) 日本語: \jasample
+
+English: the quick brown fox jumped over the lazy dog.}
+
+{\bfseries (太字) 日本語: \jasample
+
+English: the quick brown fox jumped over the lazy dog.}
+
+\normalsize
+(等幅フォントにはリガチャがないので省略)
+
+\begin{gather*}
+    S = \sum_{i=1}^n i \\
+    \Gamma \vdash x \colon \tau \quad \Gamma \vdash {\neg(A\land B)} \iff {\neg A} \lor {\neg B}
+\end{gather*}
+
+\end{document}
