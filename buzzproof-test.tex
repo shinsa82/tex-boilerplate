@@ -1,0 +1,286 @@
+\documentclass[xelatex,a4paper,ja=standard,jafont=haranoaji]{bxjsarticle}
+\usepackage{amsmath}
+\usepackage{bussproofs}
+\title{\texttt{bussproof}の実験}
+\subtitle{サブタイトル？}
+\author{Shin Saito}
+\let\impl\supset
+\EnableBpAbbreviations
+\begin{document}
+\maketitle
+\section{簡単な使い方}
+各要素を証明図にセンタリングして配置するコマンド群がある。デフォルトでは (変えられる?) このように
+\AxiomC{A}
+\AxiomC{B}
+\BinaryInfC{C}
+\AxiomC{D}
+\BinaryInfC{E}
+\DisplayProof
+テキストモードでタイプセットされるので、いちいちドル記号で囲む必要がある。
+
+実際に紙面に出力する方法のひとつは\verb|\DisplayProof|コマンドで、このように
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$\neg B$}
+\BinaryInfC{$\neg A$}
+\AxiomC{$A$}
+\BinaryInfC{$\bot$}
+\DisplayProof
+書いた場所に配置する (テキスト中にそのまま置ける) か、\texttt{prooftree}環境で
+\begin{prooftree}
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$\neg B$}
+\BinaryInfC{$\neg A$}
+\AxiomC{$A$}
+\BinaryInfC{$\bot$}
+\end{prooftree}
+別行立てでセンタリング出力する。
+
+コマンドには省略形があって、\verb|\EnableBpAbbreviations|で有効になる。
+
+\section{他のテキストとの配置}
+上で見るように、証明図全体が垂直センタリングされて他のテキスト中に配置される。
+数式中にもこのように
+$\Delta =
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$\neg B$}
+\BinaryInfC{$\neg A$}
+\AxiomC{$A$}
+\BinaryInfC{$\bot$}
+\DisplayProof$
+普通に置ける (配置が苦しいのはなぜかわからない)。上記環境だと他の配置や式番号など融通が利かないので、\texttt{gather}環境などの中に入れるといいかもしれない。
+
+証明図を文中のどこにアラインするかについては、
+\normalAlignProof
+\AxiomC{$A$}
+\AxiomC{$B$}
+\BinaryInfC{$A\land B$}
+\UnaryInfC{$A$}
+\DisplayProof
+と
+\centerAlignProof
+\AxiomC{$A$}
+\AxiomC{$B$}
+\BinaryInfC{$A\land B$}
+\UnaryInfC{$A$}
+\DisplayProof
+と
+\bottomAlignProof
+\AxiomC{$A$}
+\AxiomC{$B$}
+\BinaryInfC{$A\land B$}
+\UnaryInfC{$A$}
+\DisplayProof
+との3種類ある。
+
+証明図の上下スキップを指定できる。
+別行立ての場合の左右オフセットも指定できる。
+たぶんいちばん重要なのは仮定間の距離。デフォルトは
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$[\neg B]^1$}
+\BinaryInfC{$\neg A$}
+\AxiomC{$A$}
+\BinaryInfC{$\bot$}
+\RightLabel{\scriptsize$(1)$}
+\UnaryInfC{$\neg\neg B$}
+\DisplayProof
+こうだけど縮めると
+{\def\defaultHypSeparation{\hskip .1in}
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$[\neg B]^1$}
+\BinaryInfC{$\neg A$}
+\AxiomC{$A$}
+\BinaryInfC{$\bot$}
+\RightLabel{\scriptsize$(1)$}
+\UnaryInfC{$\neg\neg B$}
+\DisplayProof}
+こう。
+
+他にも色々長さをカスタマイズできる。
+
+\section{証明図の構造}
+Objectiveじゃない、つまり証明図が入れ子であってもコマンドが入れ子になっているわけではない。
+
+たとえば証明図の省略などの目的で線を消したかったら\verb|\noLine|を線が来そうな位置に使うと
+\AxiomC{$[P]$}
+\noLine
+\UnaryInfC{$\bot$}
+\UnaryInfC{$\neg P$}
+\DisplayProof
+こうなる。他の線のスタイルもある。線の本数はこう:
+\begin{gather*}
+    \AxiomC{$A$}
+    \noLine
+    \UnaryInfC{$B$}
+    \DisplayProof
+    \quad
+    \AxiomC{$A$}
+    \singleLine
+    \UnaryInfC{$B$}
+    \DisplayProof
+    \quad
+    \AxiomC{$A$}
+    \doubleLine
+    \UnaryInfC{$B$}
+    \DisplayProof
+\end{gather*}
+線のタイプはこう:
+\begin{gather*}
+    \AxiomC{$A$}
+    \solidLine
+    \UnaryInfC{$B$}
+    \DisplayProof
+    \quad
+    \AxiomC{$A\land B$}
+    \dottedLine
+    \UnaryInfC{$B\land A$}
+    \DisplayProof
+    \quad
+    \AxiomC{$A\land B$}
+    \dashedLine
+    \UnaryInfC{$B\land A$}
+    \DisplayProof
+\end{gather*}
+組み合わせられる:
+\begin{gather*}
+    \AxiomC{$A\land B$}
+    \doubleLine\dottedLine
+    \UnaryInfC{$B\land A$}
+    \DisplayProof
+    \quad
+    \AxiomC{$A\land B$}
+    \doubleLine\dashedLine
+    \UnaryInfC{$B\land A$}
+    \DisplayProof
+\end{gather*}
+
+線のデフォルトスタイルも設定できる。
+
+Axiom の中身は
+\AxiomC{}
+\UnaryInfC{$A\to A$}
+\DisplayProof
+このように空でも構わない (この場合、証明図の上側のボックスが潰れていることに注意。上下センタリングがやや不自然になる)。
+
+前提の数は5個まで許される。
+\begin{gather*}
+    \AxiomC{$A_1$}
+    \UnaryInfC{$B$}
+    \DisplayProof
+    \quad
+    \AxiomC{$A_1$}
+    \AxiomC{$A_2$}
+    \BinaryInfC{$B$}
+    \DisplayProof
+    \quad
+    \AxiomC{$A_1$}
+    \AxiomC{$A_2$}
+    \AxiomC{$A_3$}
+    \TrinaryInfC{$B$}
+    \DisplayProof
+    \quad
+    \AxiomC{$A_1$}
+    \AxiomC{$A_2$}
+    \AxiomC{$A_3$}
+    \AxiomC{$A_4$}
+    \QuaternaryInfC{$B$}
+    \DisplayProof \\
+    \AxiomC{$A_1$}
+    \AxiomC{$A_2$}
+    \AxiomC{$A_3$}
+    \AxiomC{$A_4$}
+    \AxiomC{$A_5$}
+    \QuinaryInfC{$B$}
+    \DisplayProof
+\end{gather*}
+
+前提や結論を複数行にする方法はあるか? なさそう
+\AxiomC{$A_1$}
+\AxiomC{$A_2$\\$A_3$}
+\BinaryInfC{$B$}
+\DisplayProof
+
+ラベルは\verb|\LeftLabel|と\verb|\RightLabel|とで。
+
+置く位置は\verb|\noLine|と同じ位置。
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$\neg B$}
+\BinaryInfC{$\neg A$}
+\AxiomC{$A$}
+\LeftLabel{Left label}
+\RightLabel{contradiction}
+\BinaryInfC{$\bot$}
+\DisplayProof
+仮定のdischarge番号などを指定したい場合は\verb|\scriptsize|などで小さくすればいい。
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$[\neg B]^1$}
+\BinaryInfC{$\neg A$}
+\AxiomC{$A$}
+\BinaryInfC{$\bot$}
+\RightLabel{\scriptsize$(1)$}
+\UnaryInfC{$\neg\neg B$}
+\DisplayProof
+
+証明木の上下反転もできる:
+\rootAtTop
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$[\neg B]^1$}
+\BinaryInfC{$\neg A$}
+\AxiomC{$A$}
+\BinaryInfC{$\bot$}
+\RightLabel{\scriptsize$(1)$}
+\UnaryInfC{$\neg\neg B$}
+\DisplayProof
+
+\section{シークエント計算モード}
+シークエントの区切り部分 ($\vdash$や$\to$がよく使われる) で揃えるモードがある。こちらは要素は数式モードでタイプセットされる。実際には揃える位置を\verb|\fCenter|で指定するだけで、区切り記号自体は表示されない。
+\Axiom$ A,B,\fCenter C $
+\UnaryInf$ A,\fCenter B,C$
+\DisplayProof
+区切り記号は\verb|\fCenter|を\verb|\def|で再定義すればいい。
+\def\fCenter{\vdash}
+\Axiom$ A,B\fCenter C $
+\UnaryInf$ A\fCenter B,C$
+\DisplayProof
+おすすめは\verb|\mbox|で定義することらしいが数式との相性が悪そう:
+\def\fCenter{\mbox{$\vdash$}}
+\Axiom$ A,B\fCenter C $
+\UnaryInf$ A\fCenter B,C$
+\DisplayProof
+なお、区切り位置を指定しないとエラーになる。
+
+\section{実用例}
+対偶論法の正当性証明 (古典論理でのみ証明できる)。
+{\def\defaultHypSeparation{\hskip .08in}
+\def\extraVskip{3pt}
+\AxiomC{${\neg B}\impl{\neg A}$}
+\AxiomC{$[\neg B]^1$}
+\RightLabel{\scriptsize MP}
+\BinaryInfC{$\neg A$}
+\AxiomC{$[A]^2$}
+\BinaryInfC{$\bot$}
+\RightLabel{\scriptsize $(1)$ RAA}
+\UnaryInfC{$\neg\neg B$}
+\RightLabel{\scriptsize 二重否定除去}
+\UnaryInfC{$B$}
+\RightLabel{\scriptsize $(2)$}
+\UnaryInfC{$A\impl B$}
+\DisplayProof}
+なお逆向きは直観主義論理でも証明できる:
+{\def\defaultHypSeparation{\hskip .08in}
+\def\extraVskip{3pt}
+\AXC{$A\impl B$}
+\AXC{$[A]^1$}
+\RightLabel{\scriptsize MP}
+\BIC{$B$}
+\AXC{$[\neg B]^2$}
+\BIC{$\bot$}
+\RightLabel{\scriptsize $(1)$ RAA}
+\UIC{$\neg A$}
+\RightLabel{\scriptsize $(2)$}
+\UIC{${\neg B}\impl{\neg A}$}
+\DP}
+よって、直観主義論理では$A\impl B$を証明することにより${\neg B}\impl{\neg A}$を結論することはできるが、その逆はできない。
+
+モーダス・トレンス: $(A\impl B),{\neg B}\vdash{\neg A}$ は後者の結論の1つ上の証明図に相当するものに他ならない。したがってこれも直観主義論理で証明できる。
+\end{document}
+
